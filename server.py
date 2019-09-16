@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 import socket
+import os
+import time
 import sys
 import signal
 import time
@@ -17,6 +19,20 @@ soc.listen(1)
 while(True):
 	c,addr = soc.accept()
 	print("Person Connected: ",c,addr)
-	c.sendall(b'Welcome Aboard')
+	# Receiving file from client
+	fileName = c.recv(1024).decode('utf-8')
+	print(fileName)
+	with open(fileName,'w+') as fd:
+		c.sendall(bytes(time.ctime(os.path.getmtime(fileName)),'utf-8'))
+		while True:
+			b = c.recv(1024)
+			print("lol b",b)
+			if not b:
+				break
+			fd.write(b.decode('utf-8'))	
+		
+	#with open(fileName,'wr') as fd:
+	#	c.sendall(fd.)
+	c.sendall(b'DONE')
 	c.close()
 
