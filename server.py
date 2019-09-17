@@ -22,6 +22,7 @@ while(True):
 	# Receiving file from client
 	fileName = c.recv(1024).decode('utf-8')
 	print(fileName)
+	fileName = fileName.split('/')[-1]
 	with open(fileName,'w+') as fd:
 		c.sendall(bytes(time.ctime(os.path.getmtime(fileName)),'utf-8'))
 		while True:
@@ -31,8 +32,5 @@ while(True):
 				break
 			fd.write(b.decode('utf-8'))	
 		
-	#with open(fileName,'wr') as fd:
-	#	c.sendall(fd.)
-	c.sendall(b'DONE')
 	c.close()
 
