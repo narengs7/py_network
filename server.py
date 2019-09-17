@@ -24,13 +24,19 @@ while(True):
 	print(fileName)
 	fileName = fileName.split('/')[-1]
 	with open(fileName,'w+') as fd:
-		c.sendall(bytes(time.ctime(os.path.getmtime(fileName)),'utf-8'))
 		while True:
-			b = c.recv(1024)
-			print("lol b",b)
-			if not b:
+			print("INSIDE TRUE")
+			bi = c.recv(1024)
+			print("lol b",bi)
+			if bi== b' ':
 				break
-			fd.write(b.decode('utf-8'))	
-		
+			fd.write(bi.decode('utf-8'))
+	
+	with open(fileName,'r') as fd:
+		for line in fd:
+			c.sendall(bytes(line,'utf-8'))
+	c.sendall(b"\n")
+	time.sleep(0.5)
+	c.sendall(bytes(time.ctime(os.path.getmtime(fileName))+"\n",'utf-8'))
 	c.close()
 
