@@ -21,14 +21,14 @@ while(True):
 	print("Person Connected: ",c,addr)
 	# Receiving file from client
 	fileName = c.recv(1024).decode('utf-8')
+	fileName = "1"+fileName.split('/')[-1]
 	print(fileName)
-	fileName = fileName.split('/')[-1]
 	with open(fileName,'w+') as fd:
 		while True:
 			print("INSIDE TRUE")
 			bi = c.recv(1024)
 			print("lol b",bi)
-			if bi== b' ':
+			if bi== b'<<EOF>>':
 				break
 			fd.write(bi.decode('utf-8'))
 	
