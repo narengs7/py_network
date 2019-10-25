@@ -37,11 +37,18 @@ s2_sock.listen(1)
 while True:
 	try:
 		con,addr=s2_sock.accept()
-		lastSavedTime_s1=con.recv(1024).decode('utf-8')
-		print("Last Server Time:",lastSavedTime_s1)
-		content = get_content(int(lastSavedTime_s1))
-		con.send(bytes(content,"utf-8"))
-
+		req_type = con.recv(1024).decode("utf-8")
+		if req_type == "DATA_FETCHER":
+			con.send(b'OK')
+			lastSavedTime_s1=con.recv(1024).decode('utf-8')
+			print("Last Server Time:",lastSavedTime_s1)
+			content = get_content(int(lastSavedTime_s1))
+			con.send(bytes(content,"utf-8"))
+		elif req_type == "WRITE":
+			con.send(b'OK')
+			
+		else:
+			con.send(b'NO')
 	except ConnectionResetError:
 		print("Ava Sathha")
 		print("Acting as Backup")
