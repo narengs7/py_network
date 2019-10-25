@@ -4,12 +4,12 @@ import signal
 
 ips = [
     {
-        'ip':"172.16.50.189",
+        'ip':"localhost",
         'port':1632
     },
     {
-        'ip':"172.16.50.132",
-        'port':5000
+        'ip':"localhost",
+        'port':1635
     }
 ]
 

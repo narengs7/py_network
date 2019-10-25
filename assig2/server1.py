@@ -21,7 +21,7 @@ ips = [
 #     return 
 
 def write_2_file(data):
-    with open(data[1],'a') as fp:
+    with open('server1/'+data[1],'a') as fp:
         print("seeking to :",data[2])
         # data[2] = int(data[2])
         # fp.seek(data[2])
@@ -31,6 +31,7 @@ def write_2_file(data):
     
 
 def fetch_new_files(sock,arr):
+    print("[+] Server is backing data.")
     try:
         for i in arr:
             if i.strip():
@@ -39,6 +40,8 @@ def fetch_new_files(sock,arr):
                 log.append(i)
     except:
         print("Exception")
+    
+    print("[+] Server is backup complete.")
 
     
 
@@ -47,7 +50,7 @@ def fetch_backed_data(log):
     s2_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s2_details = ips.pop()
     s2_sock.connect((s2_details["ip"],s2_details["port"]))
-    last_com = log[-1][0]
+    last_com = log[-1].split(',')[0]
     s2_sock.send(bytes(last_com,"utf-8"))
     s2_logs_with_contents=[]
     temp = s2_sock.recv(500).decode('utf-8')
@@ -64,22 +67,29 @@ def fetch_backed_data(log):
     #End of Function
 
 
-log=["0000"]
+log=["0000,,,"]
 try:
-    with open("server.log","rb") as fp:
+    with open("server1/server.log","rb") as fp:
         log = pickle.load(fp)
-
+        print(log)
 except EOFError:
-    print("file doesn't exist or is empty")
-print("log is ",log)
+    print("+[!] File exist or Log file is empty")
+
+
 fetch_backed_data(log)
 
-with open("server.log","wb") as fp:
+with open("server1/server.log","wb") as fp:
     pickle.dump(log,fp)
+
 
 s1_sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s1_sock.bind(("",1635))
 
+print("[+] Server is online now...")
+s1_sock.listen(1)
+while True:
+    c_conn,addr = s1_sock.connect()
+    
 
 # print(a)
 # fp.close()
