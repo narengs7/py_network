@@ -3,10 +3,10 @@ import socket
 import signal 
 
 ips = [
-    # {
-    #     'ip':"localhost",
-    #     'port':1632
-    # },
+    {
+        'ip':"localhost",
+        'port':1632
+    },
     {
         'ip':"localhost",
         'port':1635
@@ -57,7 +57,7 @@ while True:
         else:
             print("respone is not 'ok'")
         break
-    except ConnectionResetError:
+    except (ConnectionResetError,OSError):
         print("Server is closed")
         Status=0
         # change ip to next ip
@@ -72,7 +72,8 @@ while True:
         else:
             print("No More IPS")
             break
-    except OSError:
+    except :
+        print("OS ERROR")
         break
 
     finally:
